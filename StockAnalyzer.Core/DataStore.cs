@@ -30,10 +30,15 @@ namespace StockAnalyzer.Core
                 while ((line = await stream.ReadLineAsync()) != null)
                 {
                     #region Find & Parse Stock Price from CSV
+
+                    // Split the comma separated values
                     var segments = line.Split(',');
 
+                    // Remove unnecessary characters and spaces
                     for (var i = 0; i < segments.Length; i++) segments[i] = segments[i].Trim('\'', '"');
                    
+                    // If the first value in the CSV doesn't match the
+                    // stock identifyer we are looking for proceed to the next line
                     if(segments[0].ToUpperInvariant() 
                         != stockIdentifier.ToUpperInvariant())
                     {
@@ -41,6 +46,7 @@ namespace StockAnalyzer.Core
                     }
                     #endregion
 
+                    // Parse to a StockPrice instance
                     var price = new StockPrice
                     {
                         Identifier = segments[0],
